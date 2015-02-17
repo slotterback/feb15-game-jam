@@ -1,9 +1,23 @@
 # import player
 
 
-maps = object()
-maps.bar = object()
-maps.bar.loop = lambda *args: True
+# These classes are stand-ins for a none existent module.
+
+class bar(object):
+
+    def __init__(self):
+        pass
+
+    def loop(self):
+        return None
+
+
+class maps(object):
+    pass
+    bar = bar()
+
+# End stand in classes.
+
 
 def loop(screen, debug, new_game=True):
     if debug:
@@ -16,7 +30,9 @@ def loop(screen, debug, new_game=True):
     else:
         if debug: print 'game.game.loop new game'
 
-        next_map = maps.bar.loop
+        next_map = maps.bar.loop()
 
     while next_map:
         next_map = next_map(screen, debug)
+
+    if debug: print 'game.game.loop ended'
