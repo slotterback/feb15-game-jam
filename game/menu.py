@@ -16,6 +16,7 @@ def loop(screen, debug):
     running = True
     while running:
         running = handle_events(screen, debug)
+        screen.blit(message, m_rect)
         pygame.display.update()
     if debug:
         print "game.menu.loop ended"

@@ -9,8 +9,7 @@ DEBUG = True
 
 
 def main(screen, debug):
-    if debug:
-        print "Main.main started."
+    if debug: print "Main.main started."
 
     game.menu.loop(screen, debug)
 
@@ -24,3 +23,6 @@ if __name__ == "__main__":
 
     if DEBUG:
         print("Game Shutting Down.")
+
+    pygame.quit()
+    if DEBUG: print('Game shut down.')
