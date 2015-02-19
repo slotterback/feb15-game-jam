@@ -1,0 +1,1 @@
+class Enemy(pygame.sprite.DirtySprite):
