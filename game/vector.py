@@ -1,4 +1,4 @@
-from math import sqrt
+from math import cos, radians, sin, sqrt
 
 
 class Vector2(object):
@@ -6,31 +6,38 @@ class Vector2(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.length = sqrt(x*x + y*y)
 
-# ----------------------------------------------------------------------------
-# Operator Functions
-# ----------------------------------------------------------------------------
     def __add__(self, other):
-        try:
+        t = type(other)
+        if t is Vector2:
+            return Vector2(self.x + other.x, self.y + other.y)
+        elif t in [list, tuple] and len(other) == 2:
             return Vector2(self.x + other[0], self.y + other[1])
-        except KeyError:
-            try:
-                return Vector2(self[0] + other['x'], self[1] + other['y'])
-            except KeyError:
-                return NotImplemented
-        except IndexError:
+        elif t in [dict, set] and 'x' in other and 'y' in other:
+            return Vector2(self.x + other['x'], self.y + other['y'])
+        else:
             return NotImplemented
 
     def __sub__(self, other):
-        return Vector2(self[0] - other[0], self[1] - other[1])
+        t = type(other)
+        if t is Vector2:
+            return Vector2(self.x - other.x, self.y - other.y)
+        elif t in [list, tuple] and len(other) == 2:
+            return Vector2(self.x - other[0], self.y - other[1])
+        elif t in [dict, set] and 'x' in other and 'y' in other:
+            return Vector2(self.x - other['x'], self.y - other['y'])
+        else:
+            return NotImplemented
 
     def __mul__(self, other):
-        raise NotImplementedError
-        # Return dot product
+        return self.x * other.x + self.y * other.y
 
     def __len__(self):
-        return self.length
+        return sqrt(self.x*self.x + self.y*self.y)
+
+    @property
+    def length(self):
+        return sqrt(self.x*self.x + self.y*self.y)
 
     def __getitem__(self, item):
         item_type = type(item)
@@ -52,10 +59,54 @@ class Vector2(object):
         else:
             raise TypeError
 
+    def __repr__(self):
+        return "Vector2({}, {})".format(self.x, self.y)
+
     def rotate(self, degrees):
-        raise NotImplementedError
+        r = radians(degrees)
+        rcos = cos(r)
+        rsin = sin(r)
+        x = round(self.x * rcos - self.y * rsin, 5)
+        y = round(self.x * rsin + self.y * rcos, 5)
+        return Vector2(x, y)
 
     def normalize(self):
-        raise NotImplementedError
+        length = self.length
+        x = self.x / length
+        y = self.y / length
+        return Vector2(x, y)
 
-    def
+
+if __name__ == "__main__":
+
+    print("Testing module vector.")
+    print("Instantiate and __repr__")
+    vector = Vector2(1, 0)
+    rep = repr(vector)
+    assert rep == "Vector2(1, 0)"
+    print(rep + " passed.")
+
+    print("Test addition.")
+    print("With Vector2")
+    vector2 = Vector2(0, 1)
+    vector3 = vector + vector2
+    assert vector3.x == 1 and vector3.y == 1
+    print("Success.")
+    print("With list")
+    vector2 = [1, 0]
+    vector3 = vector + vector2
+    assert vector3.x == 2 and vector3.y == 0
+    print("Success")
+    print("With tuple")
+    vector2 = (2, 0)
+    vector3 = vector + vector2
+    assert vector3.x == 3 and vector3.y == 0
+    print("Success")
+
+    print("Test rotation")
+    vector2 = vector.rotate(90)
+    assert repr(vector2) == "Vector2(0.0, 1.0)"
+    vector2 = vector2.rotate(-90)
+    assert repr(vector2) == "Vector2(1.0, 0.0)"
+    vector2 = vector.rotate(-90)
+    assert repr(vector2) == 'Vector2(0.0, -1.0)'

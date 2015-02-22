@@ -1,9 +1,8 @@
 # Gets Saved under Game Folder ../Game/player.py
 
-from math import sqrt
 import pygame
 from pygame.locals import K_w, K_a, K_s, K_d
-
+from game.vector import Vector2
 
 diagonal_unit = 1 / sqrt(2)
 
@@ -20,7 +19,6 @@ class Player(pygame.sprite.DirtySprite):
         self.skill_list = [[skills[0], skills[1]],
                            [skills[2], skills[3]]]  #[skillmod[skills]]
 
-        #self.direction_list = [False, False, False, False] #Up, Down, Left Right
         self.move_vect = Vector2(0, 0)
         self.v_y = 0
         self.current_speed = 50
@@ -82,12 +80,11 @@ def skill3():
 def skill4():
     print "You're using Skill4"
 
+skill_list = [skill1, skill2, skill3, skill4]
 
-list = [skill1, skill2, skill3, skill4]
+character = Player(skill_list)
 
-character = Player(list)
-
-character.attack()
+character.attack(1)
 
 """non-combat area loop
 combat area loop
