@@ -1,49 +1,57 @@
-#Gets Saved under Game Folder ../Game/player.py
+# Gets Saved under Game Folder ../Game/player.py
 
+from math import sqrt
 import pygame
+from pygame.locals import K_w, K_a, K_s, K_d
+
+
+diagonal_unit = 1 / sqrt(2)
+
 
 class Player(pygame.sprite.DirtySprite):
-	
-	def __init__(self, skills):
-		pygame.sprite.DirtySprite.__init__(self)
-#		self.image = pygame.image.load("./images/image.png")
+    def __init__(self, skills):
+        pygame.sprite.DirtySprite.__init__(self)
+        # self.image = pygame.image.load("./images/image.png")
 
-#		self.rect = self.image.get_rect()
+        # self.rect = self.image.get_rect()
 
-#		directional true false
-		self.skill_mod = 0
-		self.skill_list = [[skills[0], skills[1]], [skills[2], skills[3]]] #[skillmod[skills]]
+        # directional true false
+        self.skill_mod = 0
+        self.skill_list = [[skills[0], skills[1]],
+                           [skills[2], skills[3]]]  #[skillmod[skills]]
 
-		#self.direction_list = [False, False, False, False] #Up, Down, Left Right
-		self.current_speed = 
-		hp = 100 # At some point this will be hp - time
+        #self.direction_list = [False, False, False, False] #Up, Down, Left Right
+        self.move_vect = Vector2(0, 0)
+        self.v_y = 0
+        self.current_speed = 50
 
+        hp = 100  # At some point this will be hp - time
 
-	def update(self, td):
-		td = 0 
-		pygame.keys.get():
-			pull out w a s d
-			if w a s d: 
-				self.vectorx = a * -1 + d
-				self.vectory = w * -1 +s
-				#1/rad2 = diagonals
-
-				if vectorx and vectory:
-					diagonal math
-				
-			else:
-				pass
-
-		self.rect.x = self.vectorx * self.speed * td
-		self.rect.y = self.vectory * self.speed * td
-		#pass
-
-	#Piper's Version
-	def attack(self, mouse):
-		return self.skill_list[self.skill_mod][mouse]()
+    def update(self, td):
+        keys = pygame.key.get_pressed()
+        w = keys[K_w]
+        s = keys[K_s]
+        a = keys[K_a]
+        d = keys[K_d]
+        self.v_x = a * -1 + d
+        self.v_y = w * -1 + s
+        if self.v_x and self.v_y:
+            self.v_x *= diagonal_unit
+            self.v_y *= diagonal_unit
+        if not (self.v_x or self.v_y):
 
 
+        new_x = self.vectorx * self.speed * td
+        new_y = self.vectory * self.speed * td
+        new_location = self.rect.move(new_x, new_y)
+        if new_location
 
+    def attack(self, mouse):
+        return self.skill_list[self.skill_mod][mouse]()
+
+# ----------------------------------------------------------------------------
+# Notes and testing functions.
+# ----------------------------------------------------------------------------
 """
 #Write function attack(toggle keypress):
 	def attack(self, mouse):
@@ -60,23 +68,26 @@ class Player(pygame.sprite.DirtySprite):
 
 
 def skill1():
-	print "You're using Skill1"
+    print "You're using Skill1"
+
+
 def skill2():
-	print "You're using Skill2"
+    print "You're using Skill2"
+
+
 def skill3():
-	print "You're using SKill3"
+    print "You're using SKill3"
+
+
 def skill4():
-	print "You're using Skill4"
+    print "You're using Skill4"
 
 
 list = [skill1, skill2, skill3, skill4]
 
-
 character = Player(list)
 
 character.attack()
-
-
 
 """non-combat area loop
 combat area loop
