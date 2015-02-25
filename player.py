@@ -1,26 +1,24 @@
-# Gets Saved under Game Folder ../Game/player.py
-
 import pygame
 from pygame.locals import K_w, K_a, K_s, K_d
 from game.vector import Vector2
-
-diagonal_unit = 1 / sqrt(2)
 
 
 class Player(pygame.sprite.DirtySprite):
     def __init__(self, skills):
         pygame.sprite.DirtySprite.__init__(self)
-        # self.image = pygame.image.load("./images/image.png")
+        surface = pygame.Surface(50, 50)
+        rect = pygame.draw.circle(surface, (0, 0, 255), (25, 25), 25)
+        self.image = surface
 
-        # self.rect = self.image.get_rect()
+        self.rect = rect
 
-        # directional true false
         self.skill_mod = 0
         self.skill_list = [[skills[0], skills[1]],
                            [skills[2], skills[3]]]  #[skillmod[skills]]
 
-        self.move_vect = Vector2(0, 0)
-        self.v_y = 0
+        self.move = Vector2(0, 0)
+        self.x = 50
+        self.y = 50
         self.current_speed = 50
 
         hp = 100  # At some point this will be hp - time
@@ -31,18 +29,11 @@ class Player(pygame.sprite.DirtySprite):
         s = keys[K_s]
         a = keys[K_a]
         d = keys[K_d]
-        self.v_x = a * -1 + d
-        self.v_y = w * -1 + s
-        if self.v_x and self.v_y:
-            self.v_x *= diagonal_unit
-            self.v_y *= diagonal_unit
-        if not (self.v_x or self.v_y):
-
-
-        new_x = self.vectorx * self.speed * td
-        new_y = self.vectory * self.speed * td
-        new_location = self.rect.move(new_x, new_y)
-        if new_location
+        x = a * -1 + d
+        y = w * -1 + s
+        self.move = Vector2(x, y)
+        self.x += self.move.x * self.current_speed * td
+        self.y += self.move.y * self.current_speed * td
 
     def attack(self, mouse):
         return self.skill_list[self.skill_mod][mouse]()

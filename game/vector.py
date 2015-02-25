@@ -1,4 +1,5 @@
 from math import cos, radians, sin, sqrt
+from numbers import Number
 
 
 class Vector2(object):
@@ -9,28 +10,36 @@ class Vector2(object):
 
     def __add__(self, other):
         t = type(other)
-        if t is Vector2:
+        if isinstance(other, Vector2):
             return Vector2(self.x + other.x, self.y + other.y)
-        elif t in [list, tuple] and len(other) == 2:
+        elif isinstance(other, (list, tuple)) and len(other) == 2:
             return Vector2(self.x + other[0], self.y + other[1])
-        elif t in [dict, set] and 'x' in other and 'y' in other:
+        elif isinstance(other, (dict, set)) and 'x' in other and 'y' in other and len(other) == 2:
             return Vector2(self.x + other['x'], self.y + other['y'])
         else:
             return NotImplemented
 
     def __sub__(self, other):
-        t = type(other)
-        if t is Vector2:
+        if isinstance(other, Vector2):
             return Vector2(self.x - other.x, self.y - other.y)
-        elif t in [list, tuple] and len(other) == 2:
+        elif isinstance(other, (list, tuple)) and len(other) == 2:
             return Vector2(self.x - other[0], self.y - other[1])
-        elif t in [dict, set] and 'x' in other and 'y' in other:
+        elif isinstance(other, dict) and 'x' in other and 'y' in other and len(other) == 2:
             return Vector2(self.x - other['x'], self.y - other['y'])
         else:
             return NotImplemented
 
     def __mul__(self, other):
-        return self.x * other.x + self.y * other.y
+        if isinstance(other, Vector2):
+            return self.x * other.x + self.y * other.y
+        elif isinstance(other, Number):
+            return Vector2(self.x * other, self.y * other)
+        else:
+            return NotImplemented
+
+    def __rmul__(self, other):
+        if isinstance(other, Number):
+            return Vector2(self.x * other, self.y * other)
 
     def __len__(self):
         return sqrt(self.x*self.x + self.y*self.y)
@@ -61,6 +70,14 @@ class Vector2(object):
 
     def __repr__(self):
         return "Vector2({}, {})".format(self.x, self.y)
+
+    def __eq__(self, other):
+        if isinstance(other, Vector2):
+            return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        if isinstance(other, Vector2):
+            return self.x != other.x or self.y != other.y
 
     def rotate(self, degrees):
         r = radians(degrees)
@@ -110,3 +127,15 @@ if __name__ == "__main__":
     assert repr(vector2) == "Vector2(1.0, 0.0)"
     vector2 = vector.rotate(-90)
     assert repr(vector2) == 'Vector2(0.0, -1.0)'
+    print("Success")
+
+    print("Test multiplication")
+    vector = Vector2(1, 0)
+    vector2 = Vector2(1, 0)
+    result = vector * vector2
+    assert result == 1
+    vector2 = Vector2(-1, 0)
+    result = vector * vector2
+    assert result == -1
+    result = vector * 2
+    assert result == Vector2(2, 0)
