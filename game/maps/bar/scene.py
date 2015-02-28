@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import KEYUP, K_ESCAPE, QUIT
 
-def run(display, player, debug=False):
+def run(display, players, debug=False, **kwargs):
     if debug: print 'game.maps.bar.loop.run started'
 
     running = True
@@ -20,3 +20,5 @@ def run(display, player, debug=False):
                 pygame.event.post(pygame.event.Event(QUIT))
         display.fill((0, 0, 0))
         pygame.display.update()
+
+    return None, players, None

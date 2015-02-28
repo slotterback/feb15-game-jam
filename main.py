@@ -1,4 +1,5 @@
 import pygame
+import manager
 import game
 
 
@@ -8,16 +9,16 @@ WIN_RES = WIN_HEIGHT, WIN_WIDTH
 DEBUG = True
 
 
-def main(screen, debug):
+def main(view, debug=False):
     if debug: print "Main.main started."
 
-    game.menu.loop(screen, debug)
+    manager.run(view, game.menu)
 
 
 if __name__ == "__main__":
     pygame.init()
     display = pygame.display.set_mode(WIN_RES)
-    pygame.display.set_caption("Test Of Feb15 GameJam")
+    pygame.display.set_caption("Test Of March15 GameJam")
 
     main(display, DEBUG)
 

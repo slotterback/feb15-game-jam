@@ -1,9 +1,9 @@
-import game
 import pygame
 from pygame.locals import KEYUP, QUIT, MOUSEBUTTONUP, K_ESCAPE, K_RETURN
+import maps.bar.scene as bar
 
 
-def loop(screen, debug):
+def run(screen, debug=False, **kwargs):
     if debug:
         print "game.menu.loop started"
     font = pygame.font.Font('freesansbold.ttf', 20)
@@ -15,23 +15,24 @@ def loop(screen, debug):
     screen.blit(message, m_rect)
     running = True
     while running:
-        running = handle_events(screen, debug)
+        running, scene = handle_events(screen, debug)
         screen.blit(message, m_rect)
         pygame.display.update()
     if debug:
         print "game.menu.loop ended"
+    return scene, None, None
 
 
 def handle_events(screen, debug):
     for event in pygame.event.get():
         if event.type == KEYUP:
             if event.key == K_ESCAPE:
-                return False
+                return False, None
             elif event.key == K_RETURN:
-                game.loop(screen, debug)
+                return False, bar
         elif event.type == MOUSEBUTTONUP:
-            game.loop(screen, debug)
+            return False, bar
         elif event.type == QUIT:
-            return False
+            return False, None
 
-    return True
+    return True, None

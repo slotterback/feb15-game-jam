@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import K_w, K_a, K_s, K_d
-from game.vector import Vector2
+
+from vector import Vector2
 
 
 class Player(pygame.sprite.DirtySprite):
